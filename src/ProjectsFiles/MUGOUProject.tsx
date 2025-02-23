@@ -2,7 +2,6 @@ import ReactDOM from "react-dom";
 import styled from "@emotion/styled";
 import MUGOU from "../assets/project1.svg";
 import { useState } from "react";
-import KeunImage from "./KeunImage";
 import MUGOUImage from "./MUGOUImages";
 interface ManageModalProps {
   isOpen?: boolean;
