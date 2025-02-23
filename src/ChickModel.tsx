@@ -1,11 +1,13 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, use } from "react";
 import * as THREE from "three";
 
 export default function ChickModel() {
   const mountRef = useRef<HTMLDivElement>(null);
   const chickRef = useRef<THREE.Group>(null);
   const isFlappingRef = useRef<boolean>(false);
+  const isRunningRef = useRef<boolean>(false);
   const mousePos = useRef(new THREE.Vector3());
+  const directionRef = useRef<boolean>(true);
 
   useEffect(() => {
     // 1. 씬, 카메라, 렌더러 생성
@@ -94,24 +96,26 @@ export default function ChickModel() {
     chick.add(leftWing);
     chick.add(rightWing);
 
-    // 다리: 두 개의 작은 실린더 (오렌지 색)
-    const legGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.5, 16);
-    const legMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 });
+    const legGroup = new THREE.Group(); //다리에 관한 그룹 생성
+    const legGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.5, 16); //원통 지오메트리 생성(상단 반지름, 하단 반지름, 높이, 세그먼트 수)
+    const legMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 }); //표준 재질 생성(색상)
     const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
-    leftLeg.position.set(-0.2, -0.2, 0);
+    leftLeg.position.set(-0.2, -0.2, 0); //위치 설정
     const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
-    rightLeg.position.set(0.2, -0.2, 0);
-    chick.add(leftLeg);
-    chick.add(rightLeg);
-
-    const featGeometry = new THREE.BoxGeometry(0.2, 0.1, 0.3);
-    const featMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 });
-    const leftFeat = new THREE.Mesh(featGeometry, featMaterial);
-    leftFeat.position.set(-0.2, -0.5, 0.05);
-    const rightFeat = new THREE.Mesh(featGeometry, featMaterial);
-    rightFeat.position.set(0.2, -0.5, 0.05);
-    chick.add(leftFeat);
-    chick.add(rightFeat);
+    rightLeg.position.set(0.2, -0.2, 0); //위치 설정
+    //발: 작은 상자
+    const featGeometry = new THREE.BoxGeometry(0.2, 0.1, 0.3); //박스 지오메트리 생성(가로, 세로, 높이)
+    const featMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 }); //표준 재질 생성(색상)
+    const leftFeat = new THREE.Mesh(featGeometry, featMaterial); //메쉬 생성(형태, 재질)
+    leftFeat.position.set(0, -0.2, 0.05); //위치 설정
+    const rightFeat = new THREE.Mesh(featGeometry, featMaterial); //메쉬 생성(형태, 재질)
+    rightFeat.position.set(0, -0.2, 0.05); //위치 설정
+    leftLeg.add(leftFeat); //왼쪽 다리에 발 추가
+    rightLeg.add(rightFeat); //오른쪽 다리에 발 추가
+    legGroup.add(leftLeg); //다리 그룹에 왼쪽 다리 추가
+    legGroup.add(rightLeg); //다리 그룹에 오른쪽 다리 추가
+    legGroup.position.y = 0; //위치 설정
+    chick.add(legGroup); //병아리에 다리 그룹 추가
 
     // 병아리 모델을 씬 중앙에 추가
     scene.add(chick);
@@ -139,6 +143,24 @@ export default function ChickModel() {
         leftWing.rotation.z = Math.PI / 2 + Math.sin(time) / 2;
         rightWing.rotation.z = -Math.PI / 2 - Math.sin(time) / 2;
       }
+
+      if (isRunningRef.current) {
+        leftLeg.rotation.x = Math.sin(time) / 2;
+        rightLeg.rotation.x = -Math.sin(time) / 2;
+        if (directionRef.current) {
+          chick.position.x += 0.05;
+
+          if (chick.position.x > 2.95) {
+            directionRef.current = false;
+          }
+        } else {
+          chick.position.x -= 0.05;
+          if (chick.position.x < 0) {
+            directionRef.current = true;
+          }
+        }
+      }
+
       renderer.render(scene, camera);
     };
     animate();
@@ -165,6 +187,23 @@ export default function ChickModel() {
       isFlappingRef.current = false;
     }, 1000);
   };
+  const handleRun = () => {
+    isRunningRef.current = true;
+    setTimeout(() => {
+      isRunningRef.current = false;
+    }, 1000);
+  };
+
+  const handleClick = () => {
+    handleFlap();
+    handleRun();
+  };
+  useEffect(() => {
+    const onActivateChick = () => {
+      handleClick();
+    };
+    window.addEventListener("activateChick", onActivateChick);
+  }, []);
 
   return <div ref={mountRef} onClick={handleFlap} />;
 }

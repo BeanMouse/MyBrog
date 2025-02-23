@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ChickModel from "./ChickModel";
 import styled from "@emotion/styled";
-import Projects from "./Projects.tsx";
+import Activity from "./Activity";
 
 const MainPage = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -9,12 +9,29 @@ const MainPage = () => {
     <>
       <Wrapper>
         {!isClicked && (
-          <Nav onClick={() => setIsClicked(!isClicked)}>프로젝트</Nav>
+          <>
+            <Detail>클릭을 하면 날개가 움직여요!</Detail>
+            <Nav
+              isProject={true}
+              onClick={() =>
+                window.dispatchEvent(new CustomEvent("activateChick"))
+              }
+            >
+              프로젝트
+            </Nav>
+            <Nav
+              onClick={() => {
+                setIsClicked(true);
+                window.dispatchEvent(new CustomEvent("activateChick"));
+              }}
+            >
+              활동
+            </Nav>
+          </>
         )}
         {isClicked && (
           <>
-            <Projects />
-            <Button onClick={() => setIsClicked(false)}>X</Button>
+            <Activity handleClick={setIsClicked} />
           </>
         )}
         <ChickModel />
@@ -23,32 +40,35 @@ const MainPage = () => {
   );
 };
 export default MainPage;
-const Button = styled.button`
+const Detail = styled.div`
   position: absolute;
-  top: 40%;
-  right: 48%;
-  font-size: 20px;
+  top: 20%;
+  left: 20%;
+  color: #505050;
+  font-size: 30px;
   font-weight: 700;
-  background-color: transparent;
-  border: none;
-  color: black;
-  cursor: pointer;
+  pointer-events: none;
 `;
-const Nav = styled.div`
-@font-face {
+
+const Nav = styled.div<{ isProject?: boolean }>`
+  position: absolute;
+  font-size: 50px;
+  @media (max-width: 768px) {
+    font-size: 30px;
+  }
+  top: 30%;
+  left: ${(props) => (props.isProject ? "20%" : "40%")};
+  :hover {
+    color:rgb(255, 217, 0);
+`;
+const Wrapper = styled.div`
+  position: relative;
+  @font-face {
     font-family: "Hakgyoansim";
     src: url("/fonts/Hakgyoansim Nadeuri TTF B.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
   }
   font-family: "Hakgyoansim";
-  position: absolute;
-  font-size: 50px;
-  top: 30%;
-  left: 20%;
-  :hover {
-    color:rgb(255, 217, 0);
-`;
-const Wrapper = styled.div`
-  positio: relative;
+  overflow: hidden;
 `;

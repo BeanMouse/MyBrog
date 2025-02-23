@@ -23,7 +23,7 @@ export default function FlyChick() {
         ctx.fillStyle = gradient; //채우기 스타일
         ctx.fillRect(0, 0, canvas.width, canvas.height); //캔버스에 사각형 그리기
 
-        // **Three.js에서 사용할 텍스처로 변환**
+        // Three.js에서 사용할 텍스처로 변환**
         const texture = new THREE.CanvasTexture(canvas); //캔버스 텍스처 생성
         return texture; //텍스처 반환
       }
