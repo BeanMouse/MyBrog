@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import KeunProject from "./KeunProject";
+import MUGOUProject from "./MUGOUProject";
 interface ActivityProps {
   handleClick: (value: boolean) => void;
 }
@@ -22,7 +23,7 @@ const Projects: React.FC<ActivityProps> = ({ handleClick }) => {
         <ActivityContainers>
           <ActivityContainer onClick={() => setIsModalOpen2(true)}>
             큰소리 사이트
-            <Period>2025.2~</Period>
+            <Period>2024.12~</Period>
             <DetailButton>자세히 보기</DetailButton>
           </ActivityContainer>
           <ActivityContainer onClick={() => setIsModalOpen(true)}>
@@ -33,7 +34,7 @@ const Projects: React.FC<ActivityProps> = ({ handleClick }) => {
         </ActivityContainers>
       </Container>
       {isModalOpen && (
-        <KeunProject
+        <MUGOUProject
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />
