@@ -2,12 +2,14 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import KeunProject from "./KeunProject";
 import MUGOUProject from "./MUGOUProject";
+import HonProject from "./HonProject";
 interface ActivityProps {
   handleClick: (value: boolean) => void;
 }
 const Projects: React.FC<ActivityProps> = ({ handleClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [isModalOpen3, setIsModalOpen3] = useState(false);
   return (
     <>
       <Container>
@@ -21,7 +23,12 @@ const Projects: React.FC<ActivityProps> = ({ handleClick }) => {
         </Button>
         프로젝트
         <ActivityContainers>
-          <ActivityContainer onClick={() => setIsModalOpen2(true)}>
+          <ActivityContainer onClick={() => setIsModalOpen3(true)}>
+            혼비니
+            <Period>2025.1 ~</Period>
+            <DetailButton>자세히 보기</DetailButton>
+          </ActivityContainer>
+          <ActivityContainer onClick={() => setIsModalOpen(true)}>
             큰소리 사이트
             <Period>2024.12~</Period>
             <DetailButton>자세히 보기</DetailButton>
@@ -45,13 +52,19 @@ const Projects: React.FC<ActivityProps> = ({ handleClick }) => {
           onClose={() => setIsModalOpen2(false)}
         />
       )}
+      {isModalOpen3 && (
+        <HonProject
+          isOpen={isModalOpen3}
+          onClose={() => setIsModalOpen3(false)}
+        />
+      )}
     </>
   );
 };
 export default Projects;
 const Button = styled.button`
   position: absolute;
-  top: 7%;
+  top: 5%;
   left: 20%;
   font-size: 25px;
   font-weight: 700;
@@ -121,7 +134,7 @@ const Container = styled.div`
   position: absolute;
   font-size: 40px;
   padding: 20px;
-  top: 20%;
+  top: 10%;
   position: absolute;
   left: 10%;
   width: 500px;
