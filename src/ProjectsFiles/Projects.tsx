@@ -1,7 +1,5 @@
 import styled from "@emotion/styled";
-import ActivityModal from "../ActivityFiles/ActivityModal";
 import { useState } from "react";
-import KeunModal from "../ActivityFiles/KeunModal";
 import KeunProject from "./KeunProject";
 interface ActivityProps {
   handleClick: (value: boolean) => void;
