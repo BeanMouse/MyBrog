@@ -63,7 +63,7 @@ const Nav = styled.div<{ isProject?: boolean }>`
     font-size: 30px;
   }
   top: 30%;
-  left: ${(props) => (props.isProject ? "20%" : "40%")};
+  left: ${(props) => (props.isProject ? "20%" : "50%")};
   :hover {
     color:rgb(255, 217, 0);
 `;
