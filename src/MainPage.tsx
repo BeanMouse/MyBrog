@@ -1,27 +1,32 @@
 import { useState } from "react";
 import ChickModel from "./ChickModel";
 import styled from "@emotion/styled";
-import Activity from "./Activity";
+import Activity from "./ActivityFiles/Activity";
+import Projects from "./ProjectsFiles/Projects";
 
 const MainPage = () => {
-  const [isClicked, setIsClicked] = useState(false);
+  const [isActivityClicked, setIsActivityClicked] = useState(false);
+  const [isProjectClicked, setIsProjectClicked] = useState(false);
   return (
     <>
       <Wrapper>
-        {!isClicked && (
+        {!isActivityClicked && !isProjectClicked && (
           <>
             <Detail>클릭을 하면 날개가 움직여요!</Detail>
             <Nav
               isProject={true}
-              onClick={() =>
-                window.dispatchEvent(new CustomEvent("activateChick"))
-              }
+              onClick={() => {
+                setIsProjectClicked(true);
+                setIsActivityClicked(false);
+                window.dispatchEvent(new CustomEvent("activateChick"));
+              }}
             >
               프로젝트
             </Nav>
             <Nav
               onClick={() => {
-                setIsClicked(true);
+                setIsActivityClicked(true);
+                setIsProjectClicked(false);
                 window.dispatchEvent(new CustomEvent("activateChick"));
               }}
             >
@@ -29,9 +34,10 @@ const MainPage = () => {
             </Nav>
           </>
         )}
-        {isClicked && (
+        {isProjectClicked && <Projects handleClick={setIsProjectClicked} />}
+        {isActivityClicked && (
           <>
-            <Activity handleClick={setIsClicked} />
+            <Activity handleClick={setIsActivityClicked} />
           </>
         )}
         <ChickModel />

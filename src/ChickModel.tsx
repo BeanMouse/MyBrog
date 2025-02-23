@@ -1,4 +1,4 @@
-import { useRef, useEffect, use } from "react";
+import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 export default function ChickModel() {
